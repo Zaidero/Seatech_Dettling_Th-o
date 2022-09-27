@@ -1,4 +1,4 @@
-/* 
+ /* 
  * File:   carte_moteur_main.c
  * Author: TP_EO_6
  *
@@ -10,6 +10,7 @@
 #include "ChipConfig.h"
 #include "IO.h"
 #include "timer.h"
+#include "PWM.h"
 
 int main(void) {
     /***************************************************************************************************/
@@ -18,6 +19,9 @@ int main(void) {
     InitOscillator();
     InitTimer1();
     InitTimer23();
+    //Moteurs
+    InitPWM();
+    PWMSetSpeed(0);
 
     /****************************************************************************************************/
     // Configuration des entrées sorties
@@ -32,5 +36,6 @@ int main(void) {
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
-    } // fin main
+    } 
+    // fin main
 }
