@@ -41,9 +41,13 @@ void InitIO()
 
     // Moteurs 
 
+    _TRISC6 = 0;
+    _TRISC7 = 0; 
+    
+    
     _TRISB14 = 0;
     _TRISB15 = 0;
-    
+   
 
     //********** Configuration des entrées : _TRISxx = 1 ********************************   
 

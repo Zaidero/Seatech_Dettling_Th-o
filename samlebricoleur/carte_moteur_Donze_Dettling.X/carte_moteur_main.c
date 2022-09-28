@@ -21,7 +21,10 @@ int main(void) {
     InitTimer23();
     //Moteurs
     InitPWM();
-    PWMSetSpeed(0);
+    
+
+    //PWMSetSpeed(20, MOTEUR_GAUCHE);
+    //PWMSetSpeed(20, MOTEUR_DROIT);
 
     /****************************************************************************************************/
     // Configuration des entrées sorties
