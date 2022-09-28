@@ -4,16 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/carte_moteur_main.c</file>
-            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/timer.h</file>
-            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/timer.c</file>
             <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/Robot.c</file>
-            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/Robot.h</file>
-            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/ToolBox.c</file>
-            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/ToolBox.h</file>
             <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/PWM.c</file>
             <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/PWM.h</file>
+            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/ADC.c</file>
+            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/timer.c</file>
+            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/ADC.h</file>
             <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/IO.c</file>
-            <file>file:/C:/GitHub/Seatech_Dettling_Th-o/samlebricoleur/carte_moteur_Donze_Dettling.X/IO.h</file>
         </group>
     </open-files>
 </project-private>
