@@ -55,7 +55,7 @@ namespace RobotInterfaceTheo_Sam
        private void SendMessage()
         {
             serialPort1.WriteLine(textBoxEmission.Text);
-            textBoxReception.Text += "Reçu : " + textBoxEmission.Text + "\r";
+            //textBoxReception.Text += "Reçu : " + textBoxEmission.Text + "\r";
             textBoxEmission.Text = "";
         }
 
