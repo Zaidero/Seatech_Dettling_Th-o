@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+
 
 namespace RobotInterfaceTheo_Sam
 {
@@ -22,22 +24,56 @@ namespace RobotInterfaceTheo_Sam
     /// </summary>
     public partial class MainWindow : Window
     {
+        Robot robot = new Robot();
+
         ReliableSerialPort serialPort1;
         public MainWindow()
         {
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM3", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM11", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += serialPort1_DataReceived;
             serialPort1.Open();
+            DispatcherTimer timerAffichage;
+            timerAffichage = new DispatcherTimer();
+            timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            timerAffichage.Tick += TimerAffichage_Tick; 
+            timerAffichage.Start();
         }
 
+        private void TimerAffichage_Tick(object sender, EventArgs e)
+        {
+            //if(robot.receivedText!="")
+            //{
+            //textBoxReception.Text += robot.receivedText;
+            //robot.receivedText = "";
+            //}
+            while (robot.byteListReceived.Count > 0)
+            {
+                var c = robot.byteListReceived.Dequeue();
+                textBoxReception.Text += "0x"+ c.ToString("X2");
+
+            }
+
+        }
+
+       
         public void serialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
-            textBoxReception.Text += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+
+            //robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+            for (int i = 0; i < e.Data.Length; i++) {
+
+                robot.byteListReceived.Enqueue(e.Data[i]);
+                
+            }
         }
+      
 
         //bool toggle = false;
         private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
+        {
+            SendMessage();
+        }
         //{
         //if(toggle)
         //buttonEnvoyer.Background = Brushes.RoyalBlue;
@@ -45,14 +81,16 @@ namespace RobotInterfaceTheo_Sam
         //buttonEnvoyer.Background = Brushes.Beige;
         //toggle = !toggle;
         //}
+        private void buttonClear_Click(object sender, RoutedEventArgs e)
         {
-
-            SendMessage();
-
+            textBoxReception.Text= "";
         }
 
 
-       private void SendMessage()
+
+
+
+        private void SendMessage()
         {
             serialPort1.WriteLine(textBoxEmission.Text);
             //textBoxReception.Text += "Reçu : " + textBoxEmission.Text + "\r";
@@ -66,5 +104,16 @@ namespace RobotInterfaceTheo_Sam
                 SendMessage();
             }
         }
+
+        byte[] byteList = new byte[20];
+        private void buttonTest_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i=0; i<=19; i++)
+            {
+                byteList[i] = (byte)(2 * i);
+            }
+            serialPort1.Write(byteList, 0, byteList.Length);
+        }
+
     }
 }

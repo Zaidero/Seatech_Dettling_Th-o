@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
+#include <libpic30.h>
 #include "ChipConfig.h"
 #include "IO.h"
 #include "timer.h"
@@ -14,6 +15,7 @@
 #include "ADC.h"
 #include "Robot.h"
 #include "carte_moteur_main.h"
+#include "UART.h"
 
 #define FCY 40000000
 
@@ -27,6 +29,7 @@ unsigned int ADCValue4;
 unsigned char sensorState;
 
 int main(void) {
+    InitUART();
     /***************************************************************************************************/
     //Initialisation de l?oscillateur
     /****************************************************************************************************/
@@ -56,6 +59,10 @@ int main(void) {
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
+        
+        SendMessageDirect((unsigned char*) "Bonjour", 7);
+        __delay32(40000000);
+
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
