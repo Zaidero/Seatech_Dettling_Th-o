@@ -50,7 +50,7 @@ namespace RobotInterfaceTheo_Sam
             while (robot.byteListReceived.Count > 0)
             {
                 var c = robot.byteListReceived.Dequeue();
-                textBoxReception.Text += "0x"+ c.ToString("X2");
+                textBoxReception.Text += " "+ c.ToString("X2");
 
             }
 

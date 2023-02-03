@@ -16,6 +16,7 @@
 #include "Robot.h"
 #include "carte_moteur_main.h"
 #include "UART.h"
+#include "CB_TX1.h"
 
 #define FCY 40000000
 
@@ -60,8 +61,6 @@ int main(void) {
     /****************************************************************************************************/
     while (1) {
         
-        SendMessageDirect((unsigned char*) "Bonjour", 7);
-        __delay32(40000000);
 
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
@@ -93,6 +92,8 @@ int main(void) {
                 sensorState = sensorState | 0b00010;
             if (robotState.distanceTelemetreUNI <= 25)
                 sensorState = sensorState | 0b00001;
+            
+            SendMessage((unsigned char*) "Bonjour", 7);
         }
     }
 }
