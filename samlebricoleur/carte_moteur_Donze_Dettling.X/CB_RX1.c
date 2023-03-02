@@ -22,8 +22,8 @@ unsigned char CB_RX1_Get(void)
     unsigned char value=cbRx1Buffer[cbRx1Tail];
     value = cbRx1Buffer[cbRx1Tail];
     cbRx1Tail += 1;
-    if (cbRx1Head > CBRX1_BUFFER_SIZE)
-        cbRx1Head = 0;
+    if (cbRx1Tail > CBRX1_BUFFER_SIZE)
+        cbRx1Tail = 0;
     return value;
 }
 unsigned char CB_RX1_IsDataAvailable(void)

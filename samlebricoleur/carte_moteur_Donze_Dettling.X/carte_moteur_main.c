@@ -17,6 +17,7 @@
 #include "carte_moteur_main.h"
 #include "UART.h"
 #include "CB_TX1.h"
+#include "CB_RX1.h"
 
 #define FCY 40000000
 
@@ -60,7 +61,13 @@ int main(void) {
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
-        
+
+        //SendMessage((unsigned char*) "Bonjour", 7);
+        int i;
+        for (i = 0; i < CB_RX1_GetDataSize(); i++) {
+            unsigned char c = CB_RX1_Get();
+            SendMessage(&c, 1);
+        }
 
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
@@ -92,8 +99,7 @@ int main(void) {
                 sensorState = sensorState | 0b00010;
             if (robotState.distanceTelemetreUNI <= 25)
                 sensorState = sensorState | 0b00001;
-            
-            SendMessage((unsigned char*) "Bonjour", 7);
+
         }
     }
 }
@@ -123,7 +129,7 @@ void OperatingSystemLoop(void) {
         case STATE_AVANCE_EN_COURS:
             SetNextRobotStateInAutomaticMode();
             break;
-            
+
         case STATE_VICTORY:
             PWMSetSpeedConsigne(20, MOTEUR_DROIT);
             PWMSetSpeedConsigne(-20, MOTEUR_GAUCHE);
@@ -141,7 +147,7 @@ void OperatingSystemLoop(void) {
         case STATE_TOURNE_GAUCHE_EN_COURS:
             SetNextRobotStateInAutomaticMode();
             break;
-            
+
         case STATE_TOURNE_GAUCHE_LEGER:
             PWMSetSpeedConsigne(12, MOTEUR_DROIT);
             PWMSetSpeedConsigne(-3, MOTEUR_GAUCHE);
@@ -159,7 +165,7 @@ void OperatingSystemLoop(void) {
         case STATE_TOURNE_DROITE_EN_COURS:
             SetNextRobotStateInAutomaticMode();
             break;
-            
+
         case STATE_TOURNE_DROITE_LEGER:
             PWMSetSpeedConsigne(-3, MOTEUR_DROIT);
             PWMSetSpeedConsigne(12, MOTEUR_GAUCHE);
@@ -177,8 +183,8 @@ void OperatingSystemLoop(void) {
         case STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS:
             SetNextRobotStateInAutomaticMode();
             break;
-            
-         case STATE_TOURNE_SUR_PLACE_GAUCHE_LEGER:
+
+        case STATE_TOURNE_SUR_PLACE_GAUCHE_LEGER:
             PWMSetSpeedConsigne(10, MOTEUR_DROIT);
             PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_SUR_PLACE_GAUCHE_LEGER_EN_COURS;
@@ -195,7 +201,7 @@ void OperatingSystemLoop(void) {
         case STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS:
             SetNextRobotStateInAutomaticMode();
             break;
-            
+
         case STATE_TOURNE_SUR_PLACE_DROITE_LEGER:
             PWMSetSpeedConsigne(-10, MOTEUR_DROIT);
             PWMSetSpeedConsigne(10, MOTEUR_GAUCHE);
@@ -204,7 +210,7 @@ void OperatingSystemLoop(void) {
         case STATE_TOURNE_SUR_PLACE_DROITE_LEGER_EN_COURS:
             SetNextRobotStateInAutomaticMode();
             break;
-            
+
         case STATE_TOURNE_SUR_PLACE_180:
             PWMSetSpeedConsigne(-30, MOTEUR_DROIT);
             PWMSetSpeedConsigne(30, MOTEUR_GAUCHE);
@@ -229,7 +235,7 @@ void SetNextRobotStateInAutomaticMode() {
             nextStateRobot = STATE_AVANCE;
             break;
         case 0b00001:
-            nextStateRobot = STATE_AVANCE; 
+            nextStateRobot = STATE_AVANCE;
             break;
         case 0b00010:
             nextStateRobot = STATE_TOURNE_GAUCHE_LEGER;
