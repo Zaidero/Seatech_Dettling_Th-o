@@ -108,12 +108,47 @@ namespace RobotInterfaceTheo_Sam
         byte[] byteList = new byte[20];
         private void buttonTest_Click(object sender, RoutedEventArgs e)
         {
-            for (int i=0; i<=19; i++)
-            {
-                byteList[i] = (byte)(2 * i);
-            }
-            serialPort1.Write(byteList, 0, byteList.Length);
+            //for (int i=0; i<=19; i++)
+            //{
+            //  byteList[i] = (byte)(2 * i);
+            //}
+            //serialPort1.Write(byteList, 0, byteList.Length);
+            int msgFunction = 0x0080;
+            string s = "Bonjour";
+            byte[] Payload = Encoding.ASCII.GetBytes(s);
+            UartEncodeAndSendMessage( msgFunction,  Payload.Length, Payload);
         }
+       
+        byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte[] msgPayload) {
+            byte checksum = 0;
+            checksum ^= 0xFE;
+            checksum ^= (byte)(msgFunction >> 8); 
+            checksum ^= (byte)(msgFunction>>0);
+            checksum ^= (byte)(msgPayloadLength >> 8);
+            checksum ^= (byte)(msgPayloadLength >> 0);
+            for (int i = 0; i < msgPayloadLength; i++) {
+                checksum ^= (byte)(msgPayload[i]);
+            }
+            return checksum;
+        }
+        void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload) {
+            byte[] frame = new byte[6+msgPayloadLength];
+            frame[0] = 0xFE;
+            frame[1] = (byte)(msgFunction >> 8);
+            frame[2] = (byte)(msgFunction >> 0);
+            frame[3] = (byte)(msgPayloadLength >> 8);
+            frame[4] = (byte)(msgPayloadLength >> 0);
+            for (int i = 0; i < msgPayloadLength; i++)
+            {
+                frame[5+i]= (byte)(msgPayload[i]);
+            }
+            byte checksum = CalculateChecksum( msgFunction, msgPayloadLength, msgPayload);
+            frame[5 + msgPayloadLength] = checksum;
+            serialPort1.Write(frame, 0, frame.Length);
+        }
+
+
+
 
     }
 }
