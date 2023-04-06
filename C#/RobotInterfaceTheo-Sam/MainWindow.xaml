@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotInterfaceTheo_Sam"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="850" Width="800">
+    <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
+        
         <GroupBox Header="Emission" Grid.Column="0" Grid.Row="0" Margin="5">
             <TextBox x:Name="textBoxEmission" Margin="0" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp"/>
         </GroupBox>
@@ -22,9 +24,30 @@
             <TextBox x:Name="textBoxReception" Margin="0" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" />
         </GroupBox>
         <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="0" Margin="0" Grid.Row="1" Width="100" HorizontalAlignment="Center" Click="buttonEnvoyer_Click"/>
-        <Button x:Name="buttonClear" Content="Clear" Grid.Column="1" Margin="0" Grid.Row="1" Width="100" HorizontalAlignment="Center" Click="buttonClear_Click"/>
+        <Button x:Name="buttonClear" Content="Clear" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Grid.Row="1" Width="100" HorizontalAlignment="Center" Click="buttonClear_Click"/>
         <Button x:Name="buttonTest" Content="TEST" Grid.Column="1" Margin="0" Grid.Row="1" Width="100" HorizontalAlignment="Center" Click="buttonTest_Click"/>
-        
+
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal">
+            <GroupBox  Header="Etat LEDs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100">
+                <StackPanel>
+                    <CheckBox Content="Led1"></CheckBox>
+                    <CheckBox Content="Led2"></CheckBox>
+                    <CheckBox Content="Led3"></CheckBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox  Header="Télémètres IR : distance mesurée" HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="200">
+                <StackPanel>
+                    <Label Content="IRGauche :"></Label>
+                    <Label Content="IRCentre :"></Label>
+                    <Label Content="IRDroit :"></Label>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox  Header="Vitesse Moteurs" HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="100">
+            </GroupBox>
+            <GroupBox  Header="Transmission de texte" HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="300">
+            </GroupBox>
+        </StackPanel>
+
 
     </Grid>
 </Window>
