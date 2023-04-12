@@ -231,12 +231,33 @@ namespace RobotInterfaceTheo_Sam
             switch(msgFunction)
             {
                 case 0x0020:
+
+                    switch (msgPayload[0]) { 
+                        case  0 :
+                            if (msgPayload[1] == 1) { labelCheckBoxLed1.IsChecked = true; }
+                            else { labelCheckBoxLed1.IsChecked = false; };
+                        break;
+                        case 1:
+                            if (msgPayload[1] == 1) { labelCheckBoxLed2.IsChecked = true; }
+                            else { labelCheckBoxLed2.IsChecked = false; };
+                            break;
+                        case 2:
+                            if (msgPayload[1] == 1) { labelCheckBoxLed3.IsChecked = true; }
+                            else { labelCheckBoxLed3.IsChecked = false; };
+                            break;
+                    }
                     break;
                 case 0x0030:
+                    labelIrGauche.Content = "IR Gauche = " + msgPayload[0].ToString() + "cm";
+                    labelIrCentre.Content = "IR Centre = " + msgPayload[1].ToString() + "cm";
+                    labelIrDroit.Content = "IR Droit = " + msgPayload[2].ToString() + "cm";
                     break;
                 case 0x0040:
+                    labelVitesseDroit.Content = "Vitesse moteur Droit = " + msgPayload[0].ToString() + "%";
+                    labelVitesseGauche.Content = "Vitesse moteur Gauche = " + msgPayload[1].ToString() + "%";
                     break;
                 case 0x0080:
+                        labelTransmissionDeTexte.Content = System.Text.Encoding.ASCII.GetString(msgPayload);
                     break;
             }
         }

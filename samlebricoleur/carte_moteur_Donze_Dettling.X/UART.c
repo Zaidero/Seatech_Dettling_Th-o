@@ -5,6 +5,7 @@
 #define BAUDRATE 115200
 #define BRGVAL ((FCY/BAUDRATE)/4)-1
 void InitUART(void) {
+    
     U1MODEbits.STSEL = 0; // 1-stop bit
     U1MODEbits.PDSEL = 0; // No Parity, 8-data bits
     U1MODEbits.ABAUD = 0; // Auto-Baud Disabled
