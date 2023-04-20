@@ -7,6 +7,8 @@
 
 #ifndef UART_PROTOCOL_H
 #define	UART_PROTOCOL_H
+#define SET_ROBOT_STATE 0x0051
+#define SET_ROBOT_MANUAL_CONTROL 0x0052
 unsigned char UartCalculateChecksum(int,int, unsigned char*);
 void UartEncodeAndSendMessage(int,int, unsigned char*);
 void UartDecodeMessage(unsigned char);

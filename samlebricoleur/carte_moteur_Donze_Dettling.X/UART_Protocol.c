@@ -51,70 +51,69 @@ int msgDecodedFunction = 0;
 int msgDecodedPayloadLength = 0;
 unsigned char msgDecodedPayload[128];
 int msgDecodedPayloadIndex = 0;
-StateReception rcvState = Waiting;
+enum StateReception rcvState = Waiting;
 
 void UartDecodeMessage(unsigned char c)
 {
 switch(rcvState)
             { 
-                case StateReception.Waiting:
+                case Waiting:
                     if (c == 0xFE)
-                        rcvState = StateReception.FunctionMSB;
+                        rcvState = FunctionMSB;
                     break;
-                case StateReception.FunctionMSB:
+                case FunctionMSB:
                     msgDecodedFunction = c << 8;
-                    rcvState = StateReception.FunctionLSB;
+                    rcvState = FunctionLSB;
                     break;
-                case StateReception.FunctionLSB:
+                case FunctionLSB:
                     msgDecodedFunction += c << 0;
-                    rcvState = StateReception.PayloadLengthMSB;
+                    rcvState = PayloadLengthMSB;
                     break;
-                case StateReception.PayloadLengthMSB:
+                case PayloadLengthMSB:
                     msgDecodedPayloadLength = c << 8;
-                    rcvState = StateReception.PayloadLengthLSB;
+                    rcvState = PayloadLengthLSB;
                     break;
-                case StateReception.PayloadLengthLSB:
+                case PayloadLengthLSB:
                     msgDecodedPayloadLength += c << 0;
                     if (msgDecodedPayloadLength == 0)
-                        rcvState = StateReception.CheckSum;
+                        rcvState = CheckSum;
                     else
                     {
-                        rcvState = StateReception.Payload;
-                        msgDecodedPayload = new byte[msgDecodedPayloadLength];
+                        rcvState = Payload;
+                        //unsigned char msgDecodedPayload[msgDecodedPayloadLength];
                         msgDecodedPayloadIndex = 0;
                     }
                     break;
-                case StateReception.Payload:                    
+                case Payload:                    
                     msgDecodedPayload[msgDecodedPayloadIndex] = c;
                     msgDecodedPayloadIndex++;
                     if (msgDecodedPayloadIndex == msgDecodedPayloadLength)
-                        rcvState = StateReception.CheckSum;
+                        rcvState = CheckSum;
                     break;
-                case StateReception.CheckSum:
+                case CheckSum:
+                {
                     unsigned char receivedChecksum = c;
-                    unsigned char calculatedChecksum = CalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
+                    unsigned char calculatedChecksum = UartCalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     if (calculatedChecksum == receivedChecksum)
                     {
-                        SendMessage(" T'as gagné une glace");
+                        //UartProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     }
                     else
                     {
-                        SendMessage(" Mange une ATMega 328");
+                        //SendMessage(" Mange une ATMega 328");
                     }
-                    rcvState = StateReception.Waiting;
+                    rcvState = Waiting;
+                }
                     break;
                 default:
-                    rcvState = StateReception.Waiting;
+                    rcvState = Waiting;
                     break;
             }
     //Fonction prenant en entree un octet et servant a reconstituer les trames
     
 }
-//void UartProcessDecodedMessage(int function,int payloadLength, unsigned char* payload)
-//{
-//Fonction appelee apres le decodage pour executer l?action
-//correspondant au message recu
-//}
+
+
 //*************************************************************************/
 //Fonctions correspondant aux messages
 //*************************************************************************/

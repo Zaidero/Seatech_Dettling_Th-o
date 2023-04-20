@@ -297,9 +297,9 @@ namespace RobotInterfaceTheo_Sam
                 case MsgType.RobotState:
                     int instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16)
                     + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
-                    labelRobotState.Content += "\nRobot␣State␣:␣" +
+                    labelRobotState.Content += "\nRobot␣State:" +
                     ((StateRobot)(msgPayload[0])).ToString() +
-                    "␣-␣" + instant.ToString() + "␣ms";
+                    "-" + instant.ToString() + "ms";
                     break;
 
             }
