@@ -18,6 +18,7 @@
 #include "UART.h"
 #include "CB_TX1.h"
 #include "CB_RX1.h"
+#include "UART_Protocol.h"
 
 #define FCY 40000000
 
@@ -99,7 +100,15 @@ int main(void) {
                 sensorState = sensorState | 0b00010;
             if (robotState.distanceTelemetreUNI <= 25)
                 sensorState = sensorState | 0b00001;
-
+            
+            unsigned char payload[]={'B','O','N','J','O','U','R'};
+            UartEncodeAndSendMessage(0x0080, 7, payload);
+            unsigned char payload1[3];
+            payload1[0]=robotState.distanceTelemetreFNAEL;
+            payload1[1]=robotState.distanceTelemetreFAGE;
+            payload1[2]=robotState.distanceTelemetreFACE06;
+            UartEncodeAndSendMessage(0x0030, 3, payload1);
+            
         }
     }
 }
@@ -330,36 +339,17 @@ void SetNextRobotStateInAutomaticMode() {
 
 
     }
-    //    unsigned char positionObstacle = PAS_D_OBSTACLE;
-    //    
-    //    
-    //    //Détermination de la position des obstacles en fonction des télémètres
-    //    if (robotState.distanceTelemetreFACE06 < 30 &&
-    //            robotState.distanceTelemetreFAGE > 20 &&
-    //            robotState.distanceTelemetreFNAEL > 30) //Obstacle à droite
-    //        positionObstacle = OBSTACLE_A_DROITE;
-    //    else if (robotState.distanceTelemetreFACE06 > 30 &&
-    //            robotState.distanceTelemetreFAGE > 20 &&
-    //            robotState.distanceTelemetreFNAEL < 30) //Obstacle à gauche
-    //        positionObstacle = OBSTACLE_A_GAUCHE;
-    //    else if (robotState.distanceTelemetreFAGE < 20) //Obstacle en face
-    //        positionObstacle = OBSTACLE_EN_FACE;
-    //    else if (robotState.distanceTelemetreFACE06 > 30 &&
-    //            robotState.distanceTelemetreFAGE > 20 &&
-    //            robotState.distanceTelemetreFNAEL > 30) //pas d?obstacle
-    //        positionObstacle = PAS_D_OBSTACLE;
-    //
-    //    //Détermination de l?état à venir du robot
-    //    if (positionObstacle == PAS_D_OBSTACLE)
-    //        nextStateRobot = STATE_AVANCE;
-    //    else if (positionObstacle == OBSTACLE_A_DROITE)
-    //        nextStateRobot = STATE_TOURNE_GAUCHE;
-    //    else if (positionObstacle == OBSTACLE_A_GAUCHE)
-    //        nextStateRobot = STATE_TOURNE_DROITE;
-    //    else if (positionObstacle == OBSTACLE_EN_FACE)
-    //        nextStateRobot = STATE_TOURNE_SUR_PLACE_GAUCHE;
 
     //Si l?on n?est pas dans la transition de l?étape en cours
     if (nextStateRobot != stateRobot - 1)
+    {
         stateRobot = nextStateRobot;
+        unsigned char payload[5];
+        payload[0] = stateRobot;
+        payload[1] = (unsigned char)(timestamp>>24);
+        payload[2] = (unsigned char)(timestamp>>16);
+        payload[3] = (unsigned char)(timestamp>>8);
+        payload[4] = (unsigned char)(timestamp>>0);
+        UartEncodeAndSendMessage(0x0050, 5, payload);
+    }
 }

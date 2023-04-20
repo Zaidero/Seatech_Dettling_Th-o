@@ -30,7 +30,7 @@ namespace RobotInterfaceTheo_Sam
         public MainWindow()
         {
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM6" +
+            serialPort1 = new ReliableSerialPort("COM5" +
                 "", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += serialPort1_DataReceived;
             serialPort1.Open();
@@ -225,40 +225,83 @@ namespace RobotInterfaceTheo_Sam
                     break;
             }
         }
+        public enum MsgType
+        {
+            Txt= 0x0080,
+            Led = 0x0020,
+            IR = 0x0030,
+            Vitesse = 0x0040,
+            RobotState=0x0050,
+        }
+        public enum StateRobot
+        {
+            STATE_ATTENTE = 0,
+            STATE_ATTENTE_EN_COURS = 1,
+            STATE_AVANCE = 2,
+            STATE_AVANCE_EN_COURS = 3,
+            STATE_TOURNE_GAUCHE = 4,
+            STATE_TOURNE_GAUCHE_EN_COURS = 5,
+            STATE_TOURNE_DROITE = 6,
+            STATE_TOURNE_DROITE_EN_COURS = 7,
+            STATE_TOURNE_SUR_PLACE_GAUCHE = 8,
+            STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS = 9,
+            STATE_TOURNE_SUR_PLACE_DROITE = 10,
+            STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS = 11,
+            STATE_ARRET = 12,
+            STATE_ARRET_EN_COURS = 13,
+            STATE_RECULE = 14,
+            STATE_RECULE_EN_COURS = 15
+        }
 
         void ProcessDecodedMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
-            switch(msgFunction)
+            switch ((MsgType)msgFunction)
             {
-                case 0x0020:
+                case MsgType.Txt:
+                    labelTransmissionDeTexte.Content = Encoding.ASCII.GetString(msgPayload);
+                    break;
+                case MsgType.Led:
+                    if (msgPayload[0] == 1)
+                    {
+                        if (msgPayload[1] == 1)
+                            labelCheckBoxLed1.IsChecked = true;
+                        else
+                            labelCheckBoxLed1.IsChecked = false;
 
-                    switch (msgPayload[0]) { 
-                        case  0 :
-                            if (msgPayload[1] == 1) { labelCheckBoxLed1.IsChecked = true; }
-                            else { labelCheckBoxLed1.IsChecked = false; };
-                        break;
-                        case 1:
-                            if (msgPayload[1] == 1) { labelCheckBoxLed2.IsChecked = true; }
-                            else { labelCheckBoxLed2.IsChecked = false; };
-                            break;
-                        case 2:
-                            if (msgPayload[1] == 1) { labelCheckBoxLed3.IsChecked = true; }
-                            else { labelCheckBoxLed3.IsChecked = false; };
-                            break;
                     }
+                    if (msgPayload[0] == 2)
+                    {
+                        if (msgPayload[1] == 1)
+                            labelCheckBoxLed1.IsChecked = true;
+                        else
+                            labelCheckBoxLed2.IsChecked = false;
+                    }
+                    if (msgPayload[0] == 3)
+                    {
+                        if (msgPayload[1] == 1)
+                            labelCheckBoxLed3.IsChecked = true;
+                        else
+                            labelCheckBoxLed3.IsChecked = true;
+                    }
+
                     break;
-                case 0x0030:
-                    labelIrGauche.Content = "IR Gauche = " + msgPayload[0].ToString() + "cm";
-                    labelIrCentre.Content = "IR Centre = " + msgPayload[1].ToString() + "cm";
-                    labelIrDroit.Content = "IR Droit = " + msgPayload[2].ToString() + "cm";
+                case MsgType.IR:
+                    labelIrGauche.Content = "IR Gauche:" + msgPayload[0] + "cm";
+                    labelIrCentre.Content = "IR Centre:" + msgPayload[1] + "cm";
+                    labelIrDroit.Content = "IR Droit:" + msgPayload[2] + "cm";
                     break;
-                case 0x0040:
-                    labelVitesseDroit.Content = "Vitesse moteur Droit = " + msgPayload[0].ToString() + "%";
-                    labelVitesseGauche.Content = "Vitesse moteur Gauche = " + msgPayload[1].ToString() + "%";
+                case MsgType.Vitesse:
+                    labelVitesseGauche.Content = "Vitesse Gauche::" + msgPayload[0] + "%";
+                    labelVitesseDroit.Content = "Vitesse Droite::" + msgPayload[1] + "%";
                     break;
-                case 0x0080:
-                        labelTransmissionDeTexte.Content = System.Text.Encoding.ASCII.GetString(msgPayload);
+                case MsgType.RobotState:
+                    int instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16)
+                    + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
+                    labelRobotState.Content += "\nRobot␣State␣:␣" +
+                    ((StateRobot)(msgPayload[0])).ToString() +
+                    "␣-␣" + instant.ToString() + "␣ms";
                     break;
+
             }
         }
 

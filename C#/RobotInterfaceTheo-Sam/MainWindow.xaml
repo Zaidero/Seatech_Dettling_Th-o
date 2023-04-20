@@ -28,29 +28,34 @@
         <Button x:Name="buttonTest" Content="TEST" Grid.Column="1" Margin="0" Grid.Row="1" Width="100" HorizontalAlignment="Center" Click="buttonTest_Click"/>
 
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal">
-            <GroupBox  Header="Etat LEDs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100">
+            <GroupBox  Header="Etat LEDs" HorizontalAlignment="Left" MinHeight="100" VerticalAlignment="Top" Width="100">
                 <StackPanel>
-                    <CheckBox x:Name ="labelCheckBoxLed1" Content=""></CheckBox>
-                    <CheckBox x:Name ="labelCheckBoxLed2" Content=""></CheckBox>
-                    <CheckBox x:Name ="labelCheckBoxLed3" Content=""></CheckBox>
+                    <CheckBox x:Name ="labelCheckBoxLed1" Content="Led Bleue"></CheckBox>
+                    <CheckBox x:Name ="labelCheckBoxLed2" Content="Led Orange"></CheckBox>
+                    <CheckBox x:Name ="labelCheckBoxLed3" Content="Led Blanche"></CheckBox>
                 </StackPanel>
             </GroupBox>
-            <GroupBox  Header="Télémètres IR : distance mesurée" HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="200">
+            <GroupBox  Header="Télémètres IR : distance mesurée" HorizontalAlignment="Left" MinHeight="100" VerticalAlignment="Top" Width="200">
                 <StackPanel>
                     <Label x:Name ="labelIrGauche"  Content=""></Label>
                     <Label x:Name ="labelIrCentre"  Content=""></Label>
                     <Label x:Name ="labelIrDroit"  Content=""></Label>
                 </StackPanel>
             </GroupBox>
-            <GroupBox  Header="Vitesse Moteurs" HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="100">
+            <GroupBox  Header="Vitesse Moteurs" HorizontalAlignment="Left" MinHeight="100" VerticalAlignment="Top" Width="100">
                 <StackPanel>
                     <Label x:Name ="labelVitesseGauche" Content=""></Label>
                     <Label x:Name ="labelVitesseDroit" Content=""></Label>
                 </StackPanel>
             </GroupBox>
-            <GroupBox  Header="Transmission de texte" HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="300">
+            <GroupBox  Header="Transmission de texte" HorizontalAlignment="Left" MinHeight="100" VerticalAlignment="Top" Width="300">
                 <StackPanel>
                     <Label x:Name ="labelTransmissionDeTexte" Content=""></Label>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox  Header="StateRobot" HorizontalAlignment="Left" MinHeight="100" VerticalAlignment="Top" Width="300">
+                <StackPanel>
+                    <Label x:Name ="labelRobotState" Content=""></Label>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
