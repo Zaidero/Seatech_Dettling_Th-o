@@ -14,9 +14,39 @@
 /* Driver configuration */
 #include "ti_drivers_config.h"
 #include "./TacheLCD/TacheLCD.h"
+#include "./Filters/Filter.h"
+
+
 
 #define TacheADC_TASK_PRIORITY 3
 #define TacheADC_TASK_STACK_SIZE 1024
+
+
+//Order1Filter LPFilterAccelX;
+//Order1Filter LPFilterAccelY;
+//Order1Filter LPFilterAccelZ;
+
+Order1Filter HPFilterAccelX;
+Order1Filter HPFilterAccelY;
+Order1Filter HPFilterAccelZ;
+
+float normeAccel = sqrtf(AccelHPX*AccelHPX+AccelHPY*AccelHPY+AccelHPZ*AccelHPZ);
+float normeAccelHP = ComputeOrder1Filter(&HPFilterAccelNorme, normeAccel);
+SerieNormeAccel[indexFFT] = normeAccelHP;
+indexFFT++;
+if(indexFFT>=FFT_WINDOW_SIZE)
+{
+//On lance la tache de calcul de la FFT et classification
+FFTClassificationTrigger(SerieNormeAccel);
+//Le resultat est recupere dans DataYFFT
+indexFFT = 0;
+}
+
+Order1Filter HPFilterAccelNorme;
+#define FFT_WINDOW_SIZE 256
+float SerieNormeAccel[FFT_WINDOW_SIZE];
+int indexFFT;
+
 Task_Struct TacheADC;
 uint8_t TacheADCStack[TacheADC_TASK_STACK_SIZE];
 Semaphore_Struct semTacheADCStruct;
@@ -45,6 +75,17 @@ static Clock_Struct myClock;
 
 void TacheADC_taskFxn(UArg a0, UArg a1)
 {
+    // Initialisation des filtres
+//    InitOrder1LPFilterEuler(&LPFilterAccelX, 1, 100);
+//    InitOrder1LPFilterEuler(&LPFilterAccelY, 1, 100);
+//    InitOrder1LPFilterEuler(&LPFilterAccelZ, 1, 100);
+
+    InitOrder1HPFilterEuler(&HPFilterAccelX, 1, 100);
+    InitOrder1HPFilterEuler(&HPFilterAccelY, 1, 100);
+    InitOrder1HPFilterEuler(&HPFilterAccelZ, 1, 100);
+
+    InitOrder1HPFilterEuler(&HPFilterAccelNorme, 1, 100);
+
     // Declaration d’une structure clock_Params
     Clock_Params clockParams;
     // Initialisation de la structure
@@ -70,12 +111,40 @@ void TacheADC_taskFxn(UArg a0, UArg a1)
         float yG = uVToG_float(dataSampledY);
         float zG = uVToG_float(dataSampledZ);
 
+//        float features[6];
+//        features[0]= xG;
+//        features[1]= 0;
+//        features[2]= yG;
+//        features[3]= 0;
+//        features[4]= zG;
+//        features[5]= 0;
+//        LCD_PrintState(0, 0, 0, 0, features, 6);
+
+        //Filtre passe-bas sur les 3 axes
+//        float AccelLPX = ComputeOrder1Filter(&LPFilterAccelX, xG);
+//        float AccelLPY = ComputeOrder1Filter(&LPFilterAccelY, yG);
+//        float AccelLPZ = ComputeOrder1Filter(&LPFilterAccelZ, zG);
+
+        float AccelHPX = ComputeOrder1Filter(&HPFilterAccelX, xG);
+        float AccelHPY = ComputeOrder1Filter(&HPFilterAccelY, yG);
+        float AccelHPZ = ComputeOrder1Filter(&HPFilterAccelZ, zG);
+
+
+//        float features[6];
+//               features[0]= AccelLPX;
+//               features[1]= 0;
+//               features[2]= AccelLPY;
+//               features[3]= 0;
+//               features[4]= AccelLPZ;
+//               features[5]= 0;
+//               LCD_PrintState(0, 0, 0, 0, features, 6);
+
         float features[6];
-        features[0]= xG;
+        features[0]= AccelHPX;
         features[1]= 0;
-        features[2]= yG;
+        features[2]= AccelHPY;
         features[3]= 0;
-        features[4]= zG;
+        features[4]= AccelHPZ;
         features[5]= 0;
         LCD_PrintState(0, 0, 0, 0, features, 6);
 
@@ -101,3 +170,4 @@ uint32_t Sampling(uint_least8_t Board_ADC_Number){
 
     return adcValue1MicroVolt;
 }
+
