@@ -250,6 +250,7 @@ void intToString(char* ax, float AX){
 }
 
 
+
 void LCD_PrintState(int State, float numClusters, int clusterDetected, float numAnomalies, float features[], int sizeFeatures){
     state = State;
     nClusters = numClusters;
@@ -260,3 +261,10 @@ void LCD_PrintState(int State, float numClusters, int clusterDetected, float num
 
     Semaphore_post(semLCDHandle);
 }
+
+float uVToG_float(uint32_t dataSampled)
+{
+float dataG = ((float)dataSampled - 1650000)/660000;
+return dataG;
+}
+

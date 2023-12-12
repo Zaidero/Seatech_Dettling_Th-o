@@ -13,6 +13,7 @@
 #include <ti/drivers/ADC.h>
 /* Driver configuration */
 #include "ti_drivers_config.h"
+#include "./TacheLCD/TacheLCD.h"
 
 #define TacheADC_TASK_PRIORITY 3
 #define TacheADC_TASK_STACK_SIZE 1024
@@ -61,9 +62,23 @@ void TacheADC_taskFxn(UArg a0, UArg a1)
     for (;;)
     {
         Semaphore_pend(semTacheADCHandle, BIOS_WAIT_FOREVER);
-        uint32_t DatasampledX = Sampling(CONFIG_ADC_0);
-        uint32_t DatasampledY = Sampling(CONFIG_ADC_1);
-        uint32_t DatasampledZ = Sampling(CONFIG_ADC_2);
+        uint32_t dataSampledX = Sampling(CONFIG_ADC_0);
+        uint32_t dataSampledY = Sampling(CONFIG_ADC_1);
+        uint32_t dataSampledZ = Sampling(CONFIG_ADC_2);
+
+        float xG = uVToG_float(dataSampledX);
+        float yG = uVToG_float(dataSampledY);
+        float zG = uVToG_float(dataSampledZ);
+
+        float features[6];
+        features[0]= xG;
+        features[1]= 0;
+        features[2]= yG;
+        features[3]= 0;
+        features[4]= zG;
+        features[5]= 0;
+        LCD_PrintState(0, 0, 0, 0, features, 6);
+
     }
 }
 
