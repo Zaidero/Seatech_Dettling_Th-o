@@ -30,17 +30,7 @@ Order1Filter HPFilterAccelX;
 Order1Filter HPFilterAccelY;
 Order1Filter HPFilterAccelZ;
 
-float normeAccel = sqrtf(AccelHPX*AccelHPX+AccelHPY*AccelHPY+AccelHPZ*AccelHPZ);
-float normeAccelHP = ComputeOrder1Filter(&HPFilterAccelNorme, normeAccel);
-SerieNormeAccel[indexFFT] = normeAccelHP;
-indexFFT++;
-if(indexFFT>=FFT_WINDOW_SIZE)
-{
-//On lance la tache de calcul de la FFT et classification
-FFTClassificationTrigger(SerieNormeAccel);
-//Le resultat est recupere dans DataYFFT
-indexFFT = 0;
-}
+
 
 Order1Filter HPFilterAccelNorme;
 #define FFT_WINDOW_SIZE 256
@@ -147,7 +137,17 @@ void TacheADC_taskFxn(UArg a0, UArg a1)
         features[4]= AccelHPZ;
         features[5]= 0;
         LCD_PrintState(0, 0, 0, 0, features, 6);
-
+        float normeAccel = sqrtf(AccelHPX*AccelHPX+AccelHPY*AccelHPY+AccelHPZ*AccelHPZ);
+        float normeAccelHP = ComputeOrder1Filter(&HPFilterAccelNorme, normeAccel);
+        SerieNormeAccel[indexFFT] = normeAccelHP;
+        indexFFT++;
+        if(indexFFT>=FFT_WINDOW_SIZE)
+        {
+        //On lance la tache de calcul de la FFT et classification
+        FFTClassificationTrigger(SerieNormeAccel);
+        //Le resultat est recupere dans DataYFFT
+        indexFFT = 0;
+        }
     }
 }
 
