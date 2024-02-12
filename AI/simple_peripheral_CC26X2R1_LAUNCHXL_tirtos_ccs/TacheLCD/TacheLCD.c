@@ -82,7 +82,7 @@ void afficherDonnées(float accx, float accy, float accz){
     Ax = accx;
     Ay = accy;
     Az = accz;
-    Semaphore_post(semLCDHandle);
+    //Semaphore_post(semLCDHandle);
 }
 
 
@@ -118,6 +118,8 @@ static void TacheLCD_taskFxn(UArg a0, UArg a1)
     Fill_LCD(0xFF,0x00,0x00);//RGB
     if(state)
         OLEDText22( 20, 7, stateTraining, SIZE_TWO, 0x00, 0xFF, 0xFF );
+    else
+        OLEDText22( 20, 7, stateDetection, SIZE_TWO, 0x00, 0xFF, 0xFF );
     OLEDText22( 5, 30, stringClusterNumber, SIZE_ONE, 0x00, 0xFF, 0xFF );
     OLEDText22( 5, 42, stringAnomaliesNumber, SIZE_ONE, 0x00, 0xFF, 0xFF );
 
@@ -126,6 +128,13 @@ static void TacheLCD_taskFxn(UArg a0, UArg a1)
     {
         //This semaphore is post by the interrupts of the SPI devices (IMU, accelerometer, gyro, ECG)
         Semaphore_pend(semLCDHandle, BIOS_WAIT_FOREVER);
+
+        if(state)
+            OLEDText22( 20, 7, stateTraining, SIZE_TWO, 0x00, 0xFF, 0xFF );
+        else
+            OLEDText22( 20, 7, stateDetection, SIZE_TWO, 0x00, 0xFF, 0xFF );
+        OLEDText22( 5, 30, stringClusterNumber, SIZE_ONE, 0x00, 0xFF, 0xFF );
+        OLEDText22( 5, 42, stringAnomaliesNumber, SIZE_ONE, 0x00, 0xFF, 0xFF );
 
         //Frequency
         char feature0[5] = " ";

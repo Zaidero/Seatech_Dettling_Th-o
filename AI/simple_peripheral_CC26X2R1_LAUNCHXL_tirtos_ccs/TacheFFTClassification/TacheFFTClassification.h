@@ -9,6 +9,7 @@
 #define TACHEFFTCLASSIFICATION_TACHEFFTCLASSIFICATION_H_
 
 void TacheFFTClassification_CreateTask(void);
-static void TacheFFTClassification_taskFxn(UArg a0, UArg a1);
+ void TacheFFTClassification_taskFxn();
+void FFTClassificationTrigger();
 
 #endif /* TACHEFFTCLASSIFICATION_TACHEFFTCLASSIFICATION_H_ */

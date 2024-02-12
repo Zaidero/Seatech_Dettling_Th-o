@@ -15,6 +15,7 @@
 #include "ti_drivers_config.h"
 #include "./TacheLCD/TacheLCD.h"
 #include "./Filters/Filter.h"
+#include "./TacheFFTClassification/TacheFFTClassification.h"
 
 
 
@@ -136,7 +137,7 @@ void TacheADC_taskFxn(UArg a0, UArg a1)
         features[3]= 0;
         features[4]= AccelHPZ;
         features[5]= 0;
-        LCD_PrintState(0, 0, 0, 0, features, 6);
+        //LCD_PrintState(0, 0, 0, 0, features, 6);
         float normeAccel = sqrtf(AccelHPX*AccelHPX+AccelHPY*AccelHPY+AccelHPZ*AccelHPZ);
         float normeAccelHP = ComputeOrder1Filter(&HPFilterAccelNorme, normeAccel);
         SerieNormeAccel[indexFFT] = normeAccelHP;
